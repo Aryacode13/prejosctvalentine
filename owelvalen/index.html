@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Card for Aurellia</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Music -->
+  <audio id="bgMusic" loop autoplay>
+    <source src="WhatsApp Audio 2025-02-13 at 22.43.37 (1).mpeg.mp3" type="audio/mp3">
+  </audio>
+  
+  <!-- Button Click Sound -->
+  <audio id="clickSound">
+    <source src="tuco-get-out.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- Tambahkan tombol musik di pojok kanan atas -->
+  <div class="music-control">
+    <button id="musicToggle" onclick="toggleMusic()">
+      🎵 Music
+    </button>
+  </div>
+
+  <div class="container">
+    <div class="slides">
+      <!-- Slide 1: Initial Card -->
+      <div class="slide" id="initial-card">
+        <div class="card">
+          <div class="hearts-container">
+            <div class="heart"></div> 
+            <div class="small-hearts"></div>
+          </div>
+          <div class="content">
+            <h1>Happy Valentine's Day</h1>
+            <h2>Aurellia</h2>
+            <div class="countdown">
+              <div id="countdown-timer"></div>
+            </div>
+            <div id="start-button" style="display: none;">
+              <button onclick="startQuiz()">Start Valentine's Journey ❤️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2: Quiz -->
+      <div class="slide" id="quiz-section" style="display: none;">
+        <div class="card">
+          <div class="floating-hearts">
+            <div class="heart-icon">❤</div>
+            <div class="heart-icon pink">💗</div>
+          </div>
+          <h2 class="quiz-title">Love Quiz</h2>
+          <div id="question-container"></div>
+          <div id="options-container"></div>
+        </div>
+      </div>
+
+      <!-- Slide 3: Final Message -->
+      <div class="slide" id="final-message" style="display: none;">
+        <div class="final-container">
+          <!-- Left side items -->
+          <div class="chosen-items left-items">
+            <div class="item-display">
+              <h3>Your Favorite Color</h3>
+              <div id="color-choice" class="color-box"></div>
+            </div>
+            <div class="item-display">
+              <h3>Your Perfect Gift</h3>
+              <div id="gift-image" class="gift-box"></div>
+            </div>
+          </div>
+
+          <!-- Center card -->
+          <div class="card">
+            <div class="hearts-container">
+              <div class="heart"></div>
+              <div class="small-hearts"></div>
+            </div>
+            <h1>Thank You Aurellia!</h1>
+            <p class="special-message">
+              On this special day,<br>
+              I want to thank you<br>
+              for being part of my life.<br>
+              May your days always be filled<br>
+              with love and happiness.<br><br>
+              Ikan hiu teberak berak<br>
+              lopyu Owel <3.<br><br>
+              Happy Valentine's Day! ❤️
+            </p>
+          </div>
+
+          <!-- Right side items -->
+          <div class="chosen-items right-items">
+            <div class="item-display">
+              <h3>Your Favorite Place</h3>
+              <div id="date-image" class="date-box"></div>
+            </div>
+            <div class="item-display">
+              <h3>Your Favorite Person</h3>
+              <div id="person-image" class="person-box"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "What's your favorite color?",
+        options: ["Pink", "Red", "Purple", "Blue"],
+        type: "text"
+      },
+      {
+        question: "What's your ideal Valentine's gift?",
+        options: ["Flowers", "Chocolate", "Teddy Bear", "Me :3"],
+        type: "text"
+      },
+      {
+        question: "Where would be your dream date?",
+        options: ["Beach", "Cafe", "My heart", "Restaurant"],
+        type: "text"
+      },
+      {
+        question: "Choose your favorite person!",
+        options: [
+          "WhatsApp Image 2025-02-13 at 20.03.47.jpg",
+          "c3dc2a96d5e889f07999bf3bba014b8f.jpg",
+          "th.jpg",
+          "3404100cc330ad95ae60bd1266a75772.jpg"
+        ],
+        type: "image"
+      }
+    ];
+
+    let currentQuestion = 0;
+
+    let userChoices = {
+      color: '',
+      gift: '',
+      date: '',
+      person: ''
+    };
+
+    // Tambahkan variabel untuk audio
+    const bgMusic = document.getElementById('bgMusic');
+    const clickSound = document.getElementById('clickSound');
+    let isMusicPlaying = true;
+
+    // Fungsi untuk memulai musik
+    function startBackgroundMusic() {
+        // Set volume musik (0.0 to 1.0)
+        bgMusic.volume = 0.5;
+        
+        bgMusic.play()
+            .then(() => {
+                console.log("Music started successfully");
+                isMusicPlaying = true;
+                document.getElementById('musicToggle').textContent = "🎵 Music";
+            })
+            .catch(error => {
+                console.log("Music autoplay prevented:", error);
+                isMusicPlaying = false;
+            });
+    }
+
+    // Update fungsi toggleMusic
+    function toggleMusic() {
+        if (isMusicPlaying) {
+            bgMusic.pause();
+            document.getElementById('musicToggle').textContent = "🔇 Music";
+        } else {
+            bgMusic.play();
+            document.getElementById('musicToggle').textContent = "🎵 Music";
+        }
+        isMusicPlaying = !isMusicPlaying;
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    window.onload = function() {
+        startBackgroundMusic();
+    };
+
+    // Backup untuk browser yang memerlukan interaksi user
+    document.addEventListener('DOMContentLoaded', function() {
+        startBackgroundMusic();
+    });
+
+    // Tambahan backup untuk memastikan musik mulai
+    document.addEventListener('click', function initAudio() {
+        if (!isMusicPlaying) {
+            startBackgroundMusic();
+        }
+        document.removeEventListener('click', initAudio);
+    }, { once: true });
+
+    // Pastikan musik tetap bermain setelah selesai
+    bgMusic.addEventListener('ended', function() {
+        bgMusic.currentTime = 0;
+        bgMusic.play();
+    });
+
+    function updateCountdown() {
+      const valentineDate = new Date('2024-02-14T00:00:00').getTime();
+      const now = new Date().getTime();
+      const distance = valentineDate - now;
+
+      if (distance < 0) {
+        document.getElementById('countdown-timer').innerHTML = "Happy Valentine's Day! ❤️";
+        document.getElementById('start-button').style.display = 'block';
+      } else {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('countdown-timer').innerHTML = 
+          `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds until Valentine's`;
+      }
+    }
+
+    function startQuiz() {
+      playClickSound();
+      slideTransition('initial-card', 'quiz-section');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (currentQuestion >= questions.length) {
+        slideTransition('quiz-section', 'final-message');
+        return;
+      }
+
+      const questionContainer = document.getElementById('question-container');
+      const optionsContainer = document.getElementById('options-container');
+      
+      questionContainer.innerHTML = `<h3>${questions[currentQuestion].question}</h3>`;
+      optionsContainer.innerHTML = '';
+
+      if (questions[currentQuestion].type === "text") {
+        questions[currentQuestion].options.forEach(option => {
+          const button = document.createElement('button');
+          button.innerText = option;
+          button.onclick = () => nextQuestion(option);
+          optionsContainer.appendChild(button);
+        });
+      } else if (questions[currentQuestion].type === "image") {
+        optionsContainer.classList.add('image-options');
+        questions[currentQuestion].options.forEach(imageSrc => {
+          const imageButton = document.createElement('div');
+          imageButton.className = 'image-option';
+          imageButton.innerHTML = `<img src="${imageSrc}" alt="Person">`;
+          imageButton.onclick = () => nextQuestion(imageSrc);
+          optionsContainer.appendChild(imageButton);
+        });
+      }
+    }
+
+    function nextQuestion(selectedOption) {
+      playClickSound();
+      const questionTypes = ['color', 'gift', 'date', 'person'];
+      const currentType = questionTypes[currentQuestion];
+      
+      console.log("Current question type:", currentType);
+      console.log("Selected option:", selectedOption);
+      
+      userChoices[currentType] = selectedOption;
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showFinalMessage() {
+      const colorBox = document.getElementById('color-choice');
+      const giftImage = document.getElementById('gift-image');
+      const dateImage = document.getElementById('date-image');
+      const personImage = document.getElementById('person-image');
+
+      // Set color
+      colorBox.style.backgroundColor = userChoices.color.toLowerCase();
+
+      // Set gift image
+      const giftImages = {  
+        'Flowers': '24-lux-vase-1.jpg',
+        'Chocolate': 'saa.jpg',
+        'Teddy Bear': 'avav.jpg',
+        'Me :3': 'a45f5230-9cf9-4ec2-84de-d6b456a847f0.jpg'
+      };
+
+      // Set date location image
+      const dateImages = {
+        'Beach': 'Grand_Anse_Beach_Grenada (1)wda.jpg',
+        'Cafe': 'fs.jpg',
+        'My heart': 'ajlfbak.jpg',
+        'Restaurant': 'stringio.jpg'
+      };
+
+      giftImage.style.backgroundImage = `url('${giftImages[userChoices.gift]}')`;
+      dateImage.style.backgroundImage = `url('${dateImages[userChoices.date]}')`;
+      
+      // Tambahkan debugging untuk date image
+      console.log("Date choice:", userChoices.date);
+      console.log("Date image URL:", dateImages[userChoices.date]);
+      
+      // Set person image dengan debugging
+      console.log("Person choice:", userChoices.person);
+      if (userChoices.person) {
+        personImage.style.backgroundImage = `url('${userChoices.person}')`;
+        console.log("Setting person image:", personImage.style.backgroundImage);
+      }
+    }
+
+    function slideTransition(fromId, toId) {
+      const fromSlide = document.getElementById(fromId);
+      const toSlide = document.getElementById(toId);
+      
+      fromSlide.style.animation = 'slideOut 0.5s forwards';
+      setTimeout(() => {
+        fromSlide.style.display = 'none';
+        toSlide.style.display = 'block';
+        toSlide.style.animation = 'slideIn 0.5s forwards';
+        if (toId === 'final-message') {
+          showFinalMessage();
+        }
+      }, 500);
+    }
+
+    // Fungsi untuk memainkan sound effect
+    function playClickSound() {
+        clickSound.currentTime = 0;
+        clickSound.play();
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
